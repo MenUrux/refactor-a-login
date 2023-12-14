@@ -1,6 +1,8 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import path from 'path';
+import passport from 'passport';
+
 import MongoStore from 'connect-mongo'
 import sessions from 'express-session'
 
@@ -14,6 +16,7 @@ import productsApiRouter from './routers/api/products.router.js';
 import usersRouter from './routers/api/users.router.js';
 import userViewRouter from './routers/views/users.router.js';
 import sessionsRouter from './routers/api/sessions.router.js';
+import { init as initPassport } from './config/passport.config.js';
 
 const app = express();
 
@@ -52,6 +55,10 @@ app.use(sessions({
   resave: true,
   saveUninitialized: true,
 }));
+
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
