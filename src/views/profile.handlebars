@@ -1,0 +1,12 @@
+<article>
+  <h1>Iniciaste sesión como: {{user.first_name}} {{user.last_name}}</h1>
+  <h3>Tus datos:</h3>
+  <p><strong>Nombre: </strong>{{user.first_name}}</p>
+  <p><strong>Apellido: </strong>{{user.last_name}}</p>
+  <p><strong>Email: </strong>{{user.email}}</p>
+  <p><strong>Edad: </strong>{{user.age}}</p>
+  <p><strong>Tu rol: </strong>{{user.role}}</p>
+  <footer>
+    <a href="/api/session/logout" role="button">Cerrar sesión</a>
+  </footer>
+</article>

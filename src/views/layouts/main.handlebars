@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>{{title}}</title>
+</head>
+
+<body>
+  <div id="overlay"></div>
+  <div id="cart-container">
+    <div id="close-cart-button">X</div>
+    <div id="cart-title">Mi Carrito</div>
+    <div id="cart-items"></div>
+    <div id="cart-total">Total: $0</div>
+
+    <!-- Botones para acciones -->
+    <button id="checkout-button">Pagar</button>
+    <button id="clear-cart-button">Vaciar Carrito</button>
+
+  </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-brand">Ecommerce</div>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a href="/" class="nav-link">Inicio</a></li>
+      <li class="nav-item"><a href="/products" class="nav-link">Productos</a></li>
+      {{#if (eq user.role 'admin')}}
+      <li class="nav-item"><a href="/add-product" class="nav-link">Admin panel</a></li>
+      {{/if}}
+      <li class="nav-item"><a href="/chat" class="nav-link">Chat</a></li>
+      <li class="nav-item"><a href="/profile" data-tooltip={{#if user}}"Iniciaste sesión como: {{user.first_name}}
+          {{user.last_name}} {{#if (eq user.role 'admin' )}}- ADMIN{{/if}}" {{else}}"Iniciar sesión / Registrarse"
+          {{/if}} data-placement="bottom"><i class="fi fi-rr-user icon"></i></a></li>
+      <li class="nav-item"><i id="cart-button" class="fi fi-rr-shopping-cart icon"><span
+            id="cart-total-items">0</span></i></li>
+    </ul>
+  </nav>
+  <main class="custom-container">
+    {{{body}}}
+  </main>
+
+
+  <script src="/js/cart.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</body>
+
+</html>

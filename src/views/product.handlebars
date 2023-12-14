@@ -1,0 +1,19 @@
+<h1>Productos</h1>
+<!-- Si hay imagen, mostrarla -->
+{{#if this.thumbnail}}
+<img src="{{this.thumbnail}}" alt="{{this.title}}">
+{{else}}
+<!-- Si no hay imagen, mostrar imagen predeterminada -->
+<img src="/assets/image/no-image.jpg" alt="No Image">
+{{/if}}
+<p class="title">{{this.title}}</p>
+{{!-- <p class="description">{{truncate this.description 75}}</p> --}}
+<p class="price">${{this.price}}</p>
+<p class="code">{{this.code}}</p>
+<p class="category">{{this.category}}</p>
+{{#lessorequal this.stock 5}}
+<p class="stock">{{this.stock}} <span class="low-stock"> - ¡Últimas unidades!</span></p>
+{{else}}
+<p class="stock">{{this.stock}}</p>
+{{/lessorequal}}
+</div>
