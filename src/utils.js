@@ -1,5 +1,6 @@
 import path from 'path';
 import url from 'url';
+import bcrypt from 'bcrypt';
 
 const __filename = url.fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
@@ -20,3 +21,8 @@ export const buildResponsePaginated = (data, baseUrl = URL_BASE, search = '', so
         nextLink: data.hasNextPage ? `${baseUrl}/products?limit=${data.limit}&page=${data.nextPage}${searchParam}${sort ? `&sort=${sort}` : ''}` : null,
     }
 }
+
+
+export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
+export const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password);
