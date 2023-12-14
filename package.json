@@ -1,7 +1,7 @@
 {
-  "name": "Proyecto Final",
+  "name": "refactor-a-login",
   "version": "1.0.0",
-  "description": "Proyecto Final",
+  "description": "Refactor a login",
   "main": "src/server.js",
   "type": "module",
   "scripts": {
