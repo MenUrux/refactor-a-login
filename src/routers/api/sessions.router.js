@@ -47,7 +47,7 @@ router.post('/sessions/register', passport.authenticate('register', { failureRed
 })
 
 
-router.post('/sessions/login', passport.authenticate('login', { failureRedirect: '/login' }), async (req, res) => {
+/* router.post('/sessions/login', passport.authenticate('login', { failureRedirect: '/login' }), async (req, res) => {
     // const { body: { email, password } } = req;
     // if (!email || !password) {
     //     return res.render('error', ({ title: 'Login | Ecommerce', messageError: 'Todos los campos son requeridos.' }))
@@ -90,9 +90,26 @@ router.post('/sessions/login', passport.authenticate('login', { failureRedirect:
     // };
     // // res.status(200).json({ message: 'Sesión iniciada correctamente.' })
     // res.redirect('/profile')
-
+    
+    console.log('req.user', req.user);
     res.redirect('/login');
 });
+ */
+
+/* router.post('/sessions/login', passport.authenticate('login', {
+    successRedirect: '/profile', // Redirigir aquí si la autenticación es exitosa
+    failureRedirect: '/login',   // Redirigir aquí si la autenticación falla
+    failureFlash: true           // Opcional: para mostrar mensajes de error
+})); */
+
+router.post('/sessions/login', passport.authenticate('login', { failureRedirect: '/login' }), async (req, res) => {
+    //res.status(200).json({ message: 'Session iniciada correctamente.' });
+    req.session.user = req.user;
+
+    console.log('req.user', req.user);
+    res.redirect('/profile');
+});
+
 
 router.post('/users/me', async (req, res) => {
     if (!req.session.user) {
@@ -116,12 +133,12 @@ router.get('/session/logout', async (req, res) => {
 });
 
 router.get('/sessions/github', passport.authenticate('github', { scope: ['user:email'] }));
-router.get('/sessions/github/callback', passport.authenticate('github',
-    { failureRedirect: '/login' }, (req, res) => {
 
-        console.log('req.user', req.user);
-        res.redirect('/profile');
-    }));
+router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+    console.log('req.user', req.user);
+    req.session.user = req.user;
+    res.redirect('/profile');
+});
 
 export default router;
 

@@ -21,7 +21,7 @@ router.get('/products', async (req, res) => {
   try {
     const result = await ProductModel.paginate(criteria, options);
     const data = buildResponsePaginated({ ...result, search, sort }, baseUrl, search);
-    res.render('products', { title: 'Productos | Ecommerce', ...data, user: req.session.user });
+    res.render('products', { title: 'Productos | Ecommerce', ...data, user: res.user });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error interno del servidor');
@@ -30,11 +30,11 @@ router.get('/products', async (req, res) => {
 
 
 router.get('/', (req, res) => {
-  res.render('index', { title: 'Inicio | Ecommerce', user: req.session.user });
+  res.render('index', { title: 'Inicio | Ecommerce', user: res.user });
 });
 
 router.get('/chat', async (req, res) => {
-  res.render('chat', { title: 'Chat | Ecommerce', user: req.session.user })
+  res.render('chat', { title: 'Chat | Ecommerce', user: res.user })
 });
 
 
@@ -42,7 +42,7 @@ router.get('/add-product', (req, res) => {
   if (!req.session.user) {
     return res.redirect('login');
   }
-  res.render('addProduct', { title: 'Agregar Producto', user: req.session.user });
+  res.render('addProduct', { title: 'Agregar Producto', user: res.user });
 });
 
 

@@ -9,7 +9,9 @@ export const init = () => {
     usernameField: 'email',
     passReqToCallback: true,
   };
+
   passport.use('register', new LocalStrategy(registerOpts, async (req, email, password, done) => {
+    console.log(`Login attempt with email: ${email}`);
     const {
       body: {
         first_name,
@@ -44,26 +46,64 @@ export const init = () => {
     callbackURL: 'http://localhost:8080/api/sessions/github/callback',
   }
 
+  /*   passport.use('github', new GithubStrategy(githubOptions, async (accessToken, refreshToken, profile, done) => {
+      const email = profile._json.email;
+      let user = await UserModel.findOne({ email });
+  
+      if (user) {
+        return done(null, user);
+      }
+      user = {
+        first_name: profile._json.name,
+        last_name: '',
+        email,
+        password: '',
+        age: 18,
+      }
+      console.log(`Login attempt with email: ${email}`);
+  
+      const newUser = await UserModel.create(user);
+      return done(null, newUser);
+    })); */
+
   passport.use('github', new GithubStrategy(githubOptions, async (accessToken, refreshToken, profile, done) => {
     const email = profile._json.email;
     let user = await UserModel.findOne({ email });
+
     if (user) {
       return done(null, user);
     }
+
+    /*     user = new UserModel({
+          first_name: profile._json.name || 'GitHubUser',
+          last_name: '',
+          email,
+          password: createHash('randomPassword'),
+          age: 18,
+        }); */
+
     user = {
-      first_name: profile._json.name,
+      first_name: profile._json.name || 'GitHubUser',
       last_name: '',
       email,
-      password: '',
+      password: createHash('randomPassword'),
       age: 18,
     }
 
-    const newUser = await UserModel.create(user);
-    return done(null, newUser);
+
+    try {
+      const newUser = await UserModel.create(user);
+      console.log(`Login attempt with email: ${user.email}`);
+      return done(null, newUser);
+    } catch (error) {
+      return done(error);
+    }
   }));
+
 
   passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     const user = await UserModel.findOne({ email });
+    console.log(user)
     if (!user) {
       return done(new Error('Correo o contraseña invalidos.'));
     }
@@ -71,7 +111,7 @@ export const init = () => {
     if (isNotValidPass) {
       return done(new Error('Correo o contraseña invalidos.'));
     }
-    done(null, user);
+    return done(null, user);
   }));
 
   passport.serializeUser((user, done) => {

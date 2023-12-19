@@ -2,13 +2,10 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import path from 'path';
 import passport from 'passport';
-
 import MongoStore from 'connect-mongo'
 import sessions from 'express-session'
 
 
-import { __dirname } from './utils.js';
-import { URI } from './db/mongodb.js'
 import indexViewRouter from './routers/views/index.router.js';
 import productViewRouter from './routers/views/products.router.js';
 import cartsApiRouter from './routers/api/carts.router.js';
@@ -16,6 +13,9 @@ import productsApiRouter from './routers/api/products.router.js';
 import usersRouter from './routers/api/users.router.js';
 import userViewRouter from './routers/views/users.router.js';
 import sessionsRouter from './routers/api/sessions.router.js';
+
+import { __dirname } from './utils.js';
+import { URI } from './db/mongodb.js'
 import { init as initPassport } from './config/passport.config.js';
 
 const app = express();
@@ -56,18 +56,19 @@ app.use(sessions({
   saveUninitialized: true,
 }));
 
-initPassport();
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
-
-// Usar la instancia de Handlebars con los helpers para configurar el motor
 app.engine('handlebars', hbs.engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
+
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 app.use('/', indexViewRouter, productViewRouter, userViewRouter);
 app.use('/api', productsApiRouter, cartsApiRouter, sessionsRouter, usersRouter);
